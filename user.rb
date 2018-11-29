@@ -1,4 +1,5 @@
-require 'data_mapper' # metagem, requires common plugins too.
+require 'data_mapper'
+require_relative "timecards.rb" # metagem, requires common plugins too.
 
 # need install dm-sqlite-adapter
 # if on heroku, use Postgres database
@@ -14,10 +15,10 @@ class User
     property :id, Serial
     property :email, String
     property :password, String
-    property :administrator, Boolean, default => false
+    property :administrator, Boolean, :default => false
     property :employer, Integer
     property :name, String
-    property :flag, Integer, default => 0
+    property :flag, Integer, :default => 0
 
     def login(password)
     	return self.password == password
@@ -47,4 +48,5 @@ DataMapper.finalize
 
 # automatically create the post table
 User.auto_upgrade!
+TimeCard.auto_upgrade!
 

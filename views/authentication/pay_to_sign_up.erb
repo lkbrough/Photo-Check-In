@@ -1,0 +1,47 @@
+<html>
+<head>
+<center>
+    <h1>Choose one of our plans to become an administrator!</h1>
+</center>
+</head>
+<body>
+<form action=" " method="post" class="payment">
+            <div class="card">
+            <h5 class="card-header">Plan 1</h5>
+            <div class="card-body">
+                <h5 class="card-title">Basic ($10/month)</h5>
+                <p class="card-text">Have up to 10 employees available to link to your account!</p>
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key= <%= "pk_test_8YqvkifbSgszGnS7WjZ6r8qA" %>
+                    data-description="A month's subscription"
+                    data-amount="1000"
+                    data-locale="auto"></script>            
+                    </div>
+            </div>
+        </form>
+<div class="card">
+  <h5 class="card-header">FEATURED: Plan 2</h5>
+  <div class="card-body">
+    <h5 class="card-title">Medium ($20/month)</h5>
+    <p class="card-text">Have up to 35 employees available to link to your account!</p>
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key= <%= "pk_test_8YqvkifbSgszGnS7WjZ6r8qA" %>
+                    data-description="A month's subscription"
+                    data-amount="2000"
+                    data-locale="auto"></script>   
+  </div>
+</div>
+<div class="card">
+  <h5 class="card-header">Plan 3</h5>
+  <div class="card-body">
+    <h5 class="card-title">Ultimate ($35/month)</h5>
+    <p class="card-text">Have an unlimited amount of employees available to link to your account!</p>
+    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key= <%= "pk_test_8YqvkifbSgszGnS7WjZ6r8qA" %>
+                    data-description="A month's subscription"
+                    data-amount="3500"
+                    data-locale="auto"></script>   
+  </div>
+</div>
+</body>
+</html>

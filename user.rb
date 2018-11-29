@@ -14,10 +14,10 @@ class User
     property :id, Serial
     property :email, String
     property :password, String
-    property :administrator, Boolean, default => false
+    property :administrator, Boolean, :default => false
     property :employer, Integer
     property :name, String
-    property :flag, Integer, default => 0
+    property :flag, Integer, :default => 0
 
     def login(password)
     	return self.password == password

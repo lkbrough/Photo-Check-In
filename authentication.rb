@@ -30,7 +30,7 @@ get "/logout" do
 end
 
 get "/sign_up" do
-	erb :"authentication/sign_up"
+	erb :"authentication/pay_to_sign_up"
 end
 
 

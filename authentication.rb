@@ -9,7 +9,6 @@ get "/login" do
 	erb :"authentication/login"
 end
 
-
 post "/process_login" do
 	email = params[:email]
 	password = params[:password]
@@ -48,6 +47,25 @@ post "/register" do
 
 	erb :"authentication/successful_signup"
 
+end
+
+get "/re_enter_password" do
+	authenticate!
+
+	@loggedin = current_user.name
+
+	erb :"reenter_password"
+end
+
+post "/check_password" do
+	authenticate!
+
+	if current_user.login(params[:password])
+		redirect "/"
+	else
+		flash[:error] = "Incorrect Password.  Try again."
+		redirect "/reenter_password"
+	end
 end
 
 #This method will return the user object of the currently signed in user

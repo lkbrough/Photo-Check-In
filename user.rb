@@ -1,4 +1,5 @@
-require 'data_mapper' # metagem, requires common plugins too.
+require 'data_mapper'
+require_relative "timecards.rb" # metagem, requires common plugins too.
 
 # need install dm-sqlite-adapter
 # if on heroku, use Postgres database
@@ -47,4 +48,5 @@ DataMapper.finalize
 
 # automatically create the post table
 User.auto_upgrade!
+TimeCard.auto_upgrade!
 

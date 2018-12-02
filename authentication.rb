@@ -18,6 +18,7 @@ post "/process_login" do
 
 	if(user && user.login(password))
 		session[:user_id] = user.id
+		flash[:success] = "Successfully logged in!"
 		redirect "/"
 	else
 		erb :"authentication/invalid_login"
@@ -30,7 +31,7 @@ get "/logout" do
 end
 
 get "/sign_up" do
-	erb :"authentication/pay_to_sign_up"
+	erb :"authentication/sign_up"
 end
 
 

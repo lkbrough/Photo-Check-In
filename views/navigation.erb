@@ -14,10 +14,15 @@
         <li class="nav-item">
           <a class="nav-link" href="/dashboard">Dashboard</a>
         </li>
-        <% if !current_user.administrator%>
+        <% if !current_user.administrator && !current_user.employee%>
           <li class="nav-item">
             <a class="nav-link" href="/pay_to_sign_up">Pay</a>
           </li>
+        <% end %>
+        <% if current_user.administrator%>
+          <li class="nav-item">
+            <a class="nav-link" href="/add_employee">Add New Employee</a>
+          </li>          
         <% end %>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>

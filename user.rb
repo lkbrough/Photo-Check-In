@@ -16,6 +16,7 @@ class User
     property :email, String
     property :password, String
     property :administrator, Boolean, :default => false
+    property :employee, Boolean, :default => false
     property :employer, Integer
     property :name, String
     property :flag, Integer, :default => 0

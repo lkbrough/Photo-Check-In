@@ -17,6 +17,10 @@ post "/process_login" do
 
 	if(user && user.login(password))
 		session[:user_id] = user.id
+		if(user.flag == 2)
+			flash[:error] = "Change your password!"
+			redirect "/newpass"
+		end
 		flash[:success] = "Successfully logged in!"
 		redirect "/"
 	else

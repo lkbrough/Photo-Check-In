@@ -9,6 +9,7 @@ class TimeCard
     property :sign_out, DateTime
 
     def time_signed_in # function to return the length of time in hours that a user was signed in for
-        
+    	return (self.signIn.to_time - self.signOut.to_time) / 3600
     end
+
 end

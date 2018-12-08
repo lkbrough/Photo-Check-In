@@ -1,7 +1,11 @@
 <% 
+  max = 1
+  TimeCard.all.each do |x|
+    max = x.user_id if x.user_id > max
+  end
   maxi = 1
   maxj = 1
-	for k in 1..5 do
+	for k in 1..max do
 		if TimeCard.first(:user_id => k)
 			i = 0
 			j = 0
@@ -13,7 +17,7 @@
 			maxj = j if j > maxj
 		end
 	end
-	max = maxi > maxj ? maxi : maxj
+	maxk = maxi > maxj ? maxi : maxj
 %>
 <table class="table table-striped table-dark">
   <thead>
@@ -21,7 +25,7 @@
       <th scope="col">#</th>
       <th scope="col">First</th>
       <th scope="col">Last</th>
-      <% for k in 1..max do %>
+      <% for k in 1..maxk do %>
         <th scope="col">Time In</th>
         <th scope="col">Time Out</th>
       <% end %>
@@ -29,8 +33,9 @@
   </thead>
   <tbody>
     <%  i = 1
-        for j in 1..5 do
-          if TimeCard.first(:user_id => j) %>
+        for j in 1..max do
+          if TimeCard.first(:user_id => j) 
+            h = 0 %>
             <tr>
               <th scope="row"><%= i %></th>
               <td><%= (User.get(TimeCard.first(:user_id => j).user_id)).first_name %></td>
@@ -38,7 +43,9 @@
               <% TimeCard.all(:user_id => j).each_with_index do |x, i| %>
                 <td><%= x.sign_in.to_time.strftime("%l:%M%p") if x.sign_in %></td>
                 <td><%= x.sign_out.to_time.strftime("%l:%M%p") if x.sign_out %></td>
-              <% end %>
+              <% h += (x.signIn.to_time - x.signOut.to_time) / 3600 if x.sign_in && x.sign_out
+                end %>
+              <td><%= h %></td>
             </tr>
           <% i += 1
           end

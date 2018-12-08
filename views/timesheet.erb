@@ -40,7 +40,7 @@
               <th scope="row"><%= i %></th>
               <td><%= (User.get(TimeCard.first(:user_id => j).user_id)).first_name %></td>
               <td><%= (User.get(TimeCard.first(:user_id => j).user_id)).last_name %></td>
-              <% TimeCard.all(:user_id => j).each_with_index do |x| %>
+              <% TimeCard.all(:user_id => j).each do |x| %>
                 <td><%= x.sign_in.to_time.strftime("%l:%M%p") if x.sign_in %></td>
                 <td><%= x.sign_out.to_time.strftime("%l:%M%p") if x.sign_out %></td>
               <% h += (x.signIn.to_time - x.signOut.to_time) / 3600 if x.sign_in && x.sign_out

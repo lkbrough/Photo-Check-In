@@ -7,4 +7,5 @@ class TimeCard
     property :complete, Boolean, :default => false
     property :sign_in, DateTime
     property :sign_out, DateTime
+    property :date, Date
 end

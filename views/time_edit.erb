@@ -53,18 +53,18 @@
         <td></td>
         <td></td>
         <% TimeCard.all(user_id: @user_id, date: @date).each do |x| %>
-        <td><form action="/edit" method="post">
+        <td><% if x.sign_in %><form action="/edit" method="post">
             <input type="submit" value="delete"/>
             <input type="hidden" value="time_in" name="type"/>
             <input type="hidden" value=<%= @date %> name="date"/>
             <input type="hidden" value=<%= @user_id %> name="user_id"/>
-        </form></td>
-        <td><form action="/edit" method="post">
+        </form><% end %></td>
+        <td><% if x.sign_out %><form action="/edit" method="post">
             <input type="submit" value="delete"/>
             <input type="hidden" value="time_out" name="type"/>
             <input type="hidden" value=<%= @date %> name="date"/>
             <input type="hidden" value=<%= @user_id %> name="user_id"/>
-        </form></td>
+        </form><% end %></td>
         <% end %>
         <td></td>
         <td></td>

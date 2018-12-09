@@ -6,6 +6,7 @@
   <thead>
     <tr>
       <th scope="col">#</th>
+      <th scope="col">Edit</th>
       <th scope="col">First</th>
       <th scope="col">Last</th>
       <% for k in 1..@maxk do %>
@@ -24,8 +25,13 @@
             h = 0 %>
             <tr>
               <th scope="row"><%= i %></th>
-              <td><%= (User.get(TimeCard.first(user_id: j, date: @temp).user_id)).first_name %></td>
-              <td><%= (User.get(TimeCard.first(user_id: j, date: @temp).user_id)).last_name %></td>
+              <td><form action="/edit" method="get">
+                <input type="submit" value="edit"/>
+                <input type="hidden" value=<%= @temp %> name="date"/>
+                <input type="hidden" value=<%= j %> name="user_id"/>
+              </form></td>
+              <td><%= User.get(j).first_name %></td>
+              <td><%= User.get(j).last_name %></td>
               <% TimeCard.all(user_id: j, date: @temp).each do |x| %>
                 <td><%= x.sign_in.strftime("%l:%M%p") if x.sign_in %></td>
                 <td><%= x.sign_out.strftime("%l:%M%p") if x.sign_out %></td>

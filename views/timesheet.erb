@@ -9,6 +9,7 @@
         <th scope="col">Time Out</th>
       <% end %>
       <th scope="col">Total Time</th>
+      <th scope="col">Complete</th>
     </tr>
   </thead>
   <tbody>
@@ -24,16 +25,17 @@
               <% TimeCard.all(:user_id => j).each do |x| %>
                 <td><%= x.sign_in.strftime("%l:%M%p") if x.sign_in %></td>
                 <td><%= x.sign_out.strftime("%l:%M%p") if x.sign_out %></td>
-              <% h += x.sign_out.to_time.to_f if x.sign_out
-              h -= x.sign_in.to_time.to_f if x.sign_in
+              <% h += x.sign_out.to_time.to_f - x.sign_in.to_time.to_f if x.complete
               k += 1
-              end %>
-              <% while k < @maxk do %>
+              end
+              h += Time.now.to_f - TimeCard.last(:user_id => j).sign_in.to_time.to_f if !TimeCard.last(:user_id => j).complete
+              while k < @maxk do %>
                 <td></td>
                 <td></td>
               <% k += 1
               end %>
               <td><%= "#{(h / 3600).floor} hours, #{(h / 60).floor} min." if h >= 0 && h / 3600 <= 24 %></td>
+              <td><%= TimeCard.last(:user_id => j).complete %></td>
             </tr>
           <% i += 1
           end

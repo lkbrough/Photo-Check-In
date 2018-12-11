@@ -12,8 +12,9 @@ SECRET_KEY = "sk_test_1SsI7rr3CuGeXMsNXW1UxPcY"
 set :publishable_key, ENV['PUBLISHABLE_KEY']
 set :secret_key, ENV['SECRET_KEY']
 
-Stripe.api_key = "sk_test_1SsI7rr3CuGeXMsNXW1UxPcY"
+set :private_key, ENV['MAILGUN_PRIVATE_KEY']
 
+Stripe.api_key = "sk_test_1SsI7rr3CuGeXMsNXW1UxPcY"
 
 #the following urls are included in authentication.rb
 # GET /login
@@ -173,6 +174,7 @@ post "/employee_checking_out" do
 		if(timecard)
 			timecard.update(sign_out: DateTime.now)
 			timecard.update(complete: true)
+			flash[:success] = "Successfully signed out! Have a good day!"
 		else
 			flash[:error] = "Time Card not found!"
 		end
@@ -191,13 +193,13 @@ post "/photo_post" do
 	f = Tempfile.new(['picture', '.jpg'])
 	f.write(tempfile.read)
 
-	RestClient.post "https://api:INSERT API KEY"\
+	RestClient.post "https://api:#{ENV['MAILGUN_PRIVATE_KEY'].to_s}"\
 	"@api.mailgun.net/v3/sandbox342c77ab45434677a6e24132490ac206.mailgun.org/messages",
-	:from => "Excited User <photo_check_in@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
-	:to => current_user.email,
-	:subject => "Employee Checked In",
-	:text => "Your employee has checked in!  Attached is the picture they sent.",
-	:attachment => File.new(tempfile.path)
+  	:from => "Excited User <mailgun@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
+  	:to => current_user.email.downcase,
+  	:subject => "Hello",
+  	:text => "Testing some Mailgun awesomness!",
+  	:attachment => File.new(tempfile.path)
 
 	f.close!
 

@@ -12,9 +12,6 @@
       </li>
 
       <% if current_user %>
-        <li class="nav-item">
-          <a class="nav-link" href="/dashboard">Dashboard</a>
-        </li>
         <% if !current_user.administrator && !current_user.employee%>
           <li class="nav-item">
             <a class="nav-link" href="/pay_to_sign_up">Pay</a>

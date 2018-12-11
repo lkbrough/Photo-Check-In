@@ -1,6 +1,11 @@
-<h1>Checking in <%= @admin %></h1>
+
 <form action="/employee_checking_in" method="POST">
-	Email: <input type="text" name="email"><br/>
-	Password: <input type="password" name="password"><br/>
-	<input type="submit" name="" value="Check In" type="button" class="btn btn-info">
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title">Checking in <%= @admin %></h5>
+		Email: <input type="text" name="email"><br/>
+		Password: <input type="password" name="password"><br/>
+		<input type="submit" name="" value="Check In" type="button" class="btn btn-info">
+	</div>
+</div>
 </form>

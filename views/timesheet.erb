@@ -1,7 +1,11 @@
+<h1>Time Cards for <%= current_user.company_name %></h1>
+<h5>Limit by Date:</h5>
 <form action="/timesheets" method="GET">
 	Date: <input type="date" name="date"><br/>
-	<input type="submit" value="submit">
+	<input type="submit" value="Submit" type="button" class="btn btn-primary">
 </form>
+</br>
+
 <table class="table table-striped table-dark">
   <thead>
     <tr>
@@ -26,7 +30,7 @@
             <tr>
               <th scope="row"><%= i %></th>
               <td><form action="/edit" method="get">
-                <input type="submit" value="edit"/>
+                <input type="submit" value="Edit" type="button" class="btn btn-outline-primary"/>
                 <input type="hidden" value=<%= @temp %> name="date"/>
                 <input type="hidden" value=<%= j %> name="user_id"/>
               </form></td>

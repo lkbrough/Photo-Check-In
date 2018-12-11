@@ -41,10 +41,12 @@ end
 post "/register" do
 	email = params[:email]
 	password = params[:password]
+	company_name = params[:company_name]
 
 	u = User.new
 	u.email = email.downcase
 	u.password =  password
+	u.company_name = company_name
 	u.save
 
 	session[:user_id] = u.id

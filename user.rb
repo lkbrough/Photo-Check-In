@@ -18,8 +18,8 @@ class User
     property :administrator, Boolean, :default => false
     property :employee, Boolean, :default => false
     property :employer, Integer
-    property :first_name, String
-    property :last_name, String
+    property :first_name, String, :default => ""
+    property :last_name, String, :default => ""
     property :company_name, String, :default => ""
     property :flag, Integer, :default => 0
 

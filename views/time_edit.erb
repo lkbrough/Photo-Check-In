@@ -34,7 +34,7 @@
         <% TimeCard.all(user_id: @user_id, date: @date).each do |x| %>
         <td><form action="/edit" method="post">
             <input type="submit" value="Change Time In:" type="button" class="btn btn-outline-info"/>
-            <input type="datetime-local" name="time_in"/>
+            <input type="datetime-local" value=<%= x.sign_in ? x.sign_in : DateTime.now %> name="time_in"/>
             <input type="hidden" value=<%= @date %> name="date"/>
             <input type="hidden" value=<%= @user_id %> name="user_id"/>
             <input type="hidden" value="change_time_in" name="type"/>
@@ -42,7 +42,7 @@
         </form></td>
         <td><form action="/edit" method="post">
             <input type="submit" value="Change Time Out" type="button" class="btn btn-outline-info"/>
-            <input type="datetime-local" name="time_out"/>
+            <input type="datetime-local" value=<%= x.sign_out ? x.sign_out : DateTime.now %> name="time_out"/>
             <input type="hidden" value=<%= @date %> name="date"/>
             <input type="hidden" value=<%= @user_id %> name="user_id"/>
             <input type="hidden" value="change_time_out" name="type"/>
@@ -65,7 +65,7 @@
             <input type="hidden" value=<%= x.sign_in %> name="sign_in"/>
         </form><% end %></td>
         <td><% if x.sign_out %><form action="/edit" method="post">
-            <input type="submit" value="Delete" />
+            <input type="submit" value="Delete" type="button" class="btn btn-outline-danger"/>
             <input type="hidden" value="delete_time_out" name="type"/>
             <input type="hidden" value=<%= @date %> name="date"/>
             <input type="hidden" value=<%= @user_id %> name="user_id"/>

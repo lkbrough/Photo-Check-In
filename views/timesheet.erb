@@ -24,7 +24,7 @@
   <tbody>
     <%  i = 1
         for j in 1..@max do
-          if TimeCard.first(user_id: j, date: @temp)
+          if TimeCard.first(user_id: j, date: @temp, employer: current_user.id)
             comp = true
             k = 0
             h = 0 %>
@@ -37,7 +37,7 @@
               </form></td>
               <td><%= User.get(j).first_name %></td>
               <td><%= User.get(j).last_name %></td>
-              <% TimeCard.all(user_id: j, date: @temp, order: [:sign_in.asc, :sign_out.asc]).each do |x| %>
+              <% TimeCard.all(user_id: j, date: @temp, employer: current_user.id, order: [:sign_in.asc, :sign_out.asc]).each do |x| %>
                 <td><% if x.bold_sign_in %>
                   <b><%= x.sign_in.strftime("%l:%M%p") if x.sign_in %></b>
                   <% else %>
@@ -54,7 +54,7 @@
                 end
               k += 1
               end
-              h += Time.now.to_f - TimeCard.last(user_id: j, date: @temp, order: [:sign_in.asc, :sign_out.asc]).sign_in.to_time.to_f if !TimeCard.last(user_id: j, date: @temp, order: [:sign_in.asc, :sign_out.asc]).complete && @temp == DateTime.now.to_date
+              h += Time.now.to_f - TimeCard.last(user_id: j, date: @temp, employer: current_user.id, order: [:sign_in.asc, :sign_out.asc]).sign_in.to_time.to_f if !TimeCard.last(user_id: j, date: @temp, employer: current_user.id, order: [:sign_in.asc, :sign_out.asc]).complete && @temp == DateTime.now.to_date
               while k < @maxk do %>
                 <td></td>
                 <td></td>

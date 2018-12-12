@@ -139,6 +139,7 @@ post "/employee_checking_in" do
 		timecard.date = DateTime.now.to_date
 		timecard.sign_in = DateTime.now
 		timecard.user_id = username.id
+		timecard.employer = current_user.id
 		timecard.save
 		@check_in_name = username.first_name + " " + username.last_name
 	else
@@ -233,16 +234,16 @@ get "/timesheets" do
 	@temp = DateTime.now.to_date
 	@temp = params[:date] if params[:date]
 	@max = 1
-  	TimeCard.all(date: @temp).each do |x|
+  	TimeCard.all(date: @temp, employer: current_user.id).each do |x|
 		@max = x.user_id if x.user_id > @max
   	end
   	maxi = 1
 	maxj = 1
 	for k in 1..@max do
-		if TimeCard.first(user_id: k, date: @temp)
+		if TimeCard.first(user_id: k, date: @temp, employer: current_user.id)
 			i = 0
 			j = 0
-			TimeCard.all(user_id: k, date: @temp).each do |x|
+			TimeCard.all(user_id: k, date: @temp, employer: current_user.id).each do |x|
 				i += 1 if x.sign_in
 				j += 1 if x.sign_out
 			end
@@ -261,7 +262,7 @@ get "/edit" do
 	@user_id = params[:user_id].to_i
 	maxi = 0
 	maxj = 0
-	TimeCard.all(date: @date, user_id: @user_id).each do |x|
+	TimeCard.all(date: @date, user_id: @user_id, employer: current_user.id).each do |x|
 		maxi += 1 if x.sign_in
 		maxj += 1 if x.sign_out
 	end
@@ -274,32 +275,34 @@ post "/edit" do
 	administrator!
 	redirect "/timesheets" if !params[:type] || !params[:date] || !params[:user_id]
 	if params[:type] == "change_time_in" && params[:change_date] && params[:time_in]
-		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in])
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in], employer: current_user.id)
 		x.update(date: params[:change_date], sign_in: params[:time_in], bold_sign_in: true)
 		x.update(complete: true) if x.sign_out
 	elsif params[:type] == "change_time_out" && params[:change_date] && params[:time_out]
-		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out])
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out], employer: current_user.id)
 		x.update(date: params[:change_date], sign_out: params[:time_out], bold_sign_out: true)
 		x.update(complete: true) if x.sign_in
 	elsif params[:type] == "delete_time_in"
-		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in])
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in], employer: current_user.id)
 		if x.sign_out
 			timecard = TimeCard.new
 			timecard.date = x.date
 			timecard.sign_out = x.sign_out
 			timecard.user_id = x.user_id
+			timecard.employer = current_user.id
 			timecard.save
 			x.destroy
 		else
 			x.destroy
 		end
 	elsif params[:type] == "delete_time_out"
-		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out])
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out], employer: current_user.id)
 		if x.sign_in
 			timecard = TimeCard.new
 			timecard.date = x.date
 			timecard.sign_in = x.sign_in
 			timecard.user_id = x.user_id
+			imecard.employer = current_user.id
 			timecard.save
 			x.destroy
 		else

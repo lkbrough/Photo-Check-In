@@ -19,6 +19,12 @@
         <% end %>
         <% if current_user.administrator%>
           <li class="nav-item">
+            <a class="nav-link" href="/employees">Employees</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/timesheets">Timesheets</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="/add_employee">Add New Employee</a>
           </li>
           <li class="nav-item">
@@ -26,9 +32,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/employee_check_out">Check Out Employees</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/timesheets">Timesheets</a>
           </li>
         <% end %>
         <li class="nav-item">

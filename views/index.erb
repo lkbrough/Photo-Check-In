@@ -4,19 +4,27 @@
     <img src="imgs/logo.png" alt="Photo Check In Logo" height="25%" width="25%" style="float:right;">
     <h1 class="display-3">Photo Check In!</h1>
   <p>
-    The Best way to securely check in your employees! Track and verify that employees where present at the times they said they were. It's easy for employees too! Create logins for each employee, have them check in and they can get straight to work. No more fussing over the exact time they got into work and how long they were there for. Verifies employees being present by having them submit a photo which is then emailed to the administrator! A faster and cheaper alternative to testy finger print scanners and more accurate than normal time cards. Sign up today!
+    The best way to securely check in your employees! Track and verify that employees where present at the times they said they were. It's easy for employees too! Create logins for each employee, have them check in and they can get straight to work. No more fussing over the exact time they got into work and how long they were there for. Verifies employees being present by having them submit a photo which is then emailed to the administrator! A faster and cheaper alternative to testy finger print scanners and more accurate than normal time cards.
   </p>
   
-    <p><a class="btn btn-primary btn-lg" href="/sign_up" role="button">Sign up &raquo;</a></p>
+    <p>
+      <% if current_user.nil? %>
+      <a class="btn btn-primary btn-lg" href="/sign_up" role="button">Sign up &raquo;</a>
+      <% elsif current_user and current_user.administrator %>
+      <a class="btn btn-primary btn-lg" href="/add_employee" role="button">Add an employee &raquo;</a>
+      <% elsif current_user and !current_user.administrator and !current_user.employee %>
+      <a class="btn btn-primary btn-lg" href="/pay_to_sign_up" role="button">Pay &raquo;</a>
+      <% end %>
+    </p>
   </div>
 </div>
-
+<% if current_user and current_user.administrator %>
 <div class="container">
   <!-- Example row of columns -->
   <div class="row">
     <div class="col-md-4">
-      <h2>Employer Sign In</h2>
-      <p><a class="btn btn-secondary" href="/login" role="button">Sign In &raquo;</a></p>
+      <h2>View Employees</h2>
+      <p><a class="btn btn-secondary" href="/employees" role="button">Employees &raquo;</a></p>
     </div>
     <div class="col-md-4">
       <h2>Add a New Employee</h2>
@@ -27,7 +35,15 @@
       <p><a class="btn btn-secondary" href="/timesheets" role="button">Timesheets &raquo;</a></p>
     </div>
   </div>
+  <% else %>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Employee and Other Features coming soon!</h5>
+      Be able to view your timecards and change your password!
+    </div>
+  </div>
+  <% end %>
 
-  <hr>
+
 
 </div> <!-- /container -->

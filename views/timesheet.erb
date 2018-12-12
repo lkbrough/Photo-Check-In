@@ -38,8 +38,16 @@
               <td><%= User.get(j).first_name %></td>
               <td><%= User.get(j).last_name %></td>
               <% TimeCard.all(user_id: j, date: @temp, order: [:sign_in.asc, :sign_out.asc]).each do |x| %>
-                <td><%= x.sign_in.strftime("%l:%M%p") if x.sign_in %></td>
-                <td><%= x.sign_out.strftime("%l:%M%p") if x.sign_out %></td>
+                <td><% if x.bold_sign_in %>
+                  <b><%= x.sign_in.strftime("%l:%M%p") if x.sign_in %></b>
+                  <% else %>
+                  <%= x.sign_in.strftime("%l:%M%p") if x.sign_in %>
+                <% end %></td>
+                <td><% if x.bold_sign_out %>
+                  <b><%= x.sign_out.strftime("%l:%M%p") if x.sign_out %></b>
+                  <% else %>
+                  <%= x.sign_out.strftime("%l:%M%p") if x.sign_out %>
+                  <% end %></td>
               <% if x.complete
                   h += x.sign_out.to_time.to_f - x.sign_in.to_time.to_f
                 else comp = false

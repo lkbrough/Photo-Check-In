@@ -193,7 +193,7 @@ post "/photo_post" do
 	f = Tempfile.new(['picture', '.jpg'])
 	f.write(tempfile.read)
 
-	RestClient.post "https://api:#{ENV['MAINGUN_API_KEY']}"\
+	RestClient.post "https://api:#{ENV['MAINGUN_API_KEY'].to_s}"\
 	"@api.mailgun.net/v3/sandbox342c77ab45434677a6e24132490ac206.mailgun.org/messages",
   	:from => "Excited User <mailgun@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
   	:to => current_user.email.downcase,

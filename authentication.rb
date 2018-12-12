@@ -30,6 +30,7 @@ end
 
 get "/logout" do
 	session[:user_id] = nil
+	session[:require_log_in] = nil
 	redirect "/"
 end
 

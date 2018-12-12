@@ -1,0 +1,27 @@
+<h1>Employees for <%= current_user.company_name %></h1></br>
+<table class="table table-striped table-dark">
+  <thead>
+    <tr>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Change Password</th>
+      <th scope="col">Delete Employee</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @employee.each do |entry| %>
+        <tr>
+          <td><%= entry.first_name %></td>
+          <td><%= entry.last_name %></td>
+          <td><form method="POST" action="/temporary_password">
+            <input type="hidden" value=<%= entry.id %> name="id">
+            <input type="submit" value="Change Password" type="button" class="btn btn-outline-info">
+          </form></td>
+          <td><form method="POST" action="/delete_account">
+            <input type="hidden" value=<%= entry.id %> name="id">
+            <input type="submit" value="Delete" type="button" class="btn btn-outline-danger">
+          </form></td>
+        </tr>
+    <% end %>
+  </tbody>
+</table>

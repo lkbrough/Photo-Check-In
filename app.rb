@@ -39,8 +39,7 @@ get "/employee_check_in" do
 	administrator!
 
 	@admin = current_user.company_name
-	@require_log_in = true
-	@loggedIn = current_user.email
+	session[:require_log_in] = true
 
 	erb :employee_check_in
 
@@ -51,8 +50,7 @@ get "/employee_check_out" do
 	administrator!
 
 	@admin = current_user.company_name
-	@require_log_in = true
-	@loggedIn = current_user.email
+	session[:require_log_in] = true
 
 	erb :employee_check_out
 end
@@ -71,6 +69,7 @@ end
 
 get "/reenter_password" do
 	authenticate!
+	@email = current_user.email
 	erb :reenter_password
 end
 
@@ -153,10 +152,8 @@ end
 post "/password_re_enter" do
 	authenticate!
 
-	username = User.first(email: @loggedIn.email.downcase)
-	if(username && username.login(params[:password]))
-		@require_log_in = false
-		@logged_in = ""
+	if(current_user.login(params[:password]))
+		session[:require_log_in] = false
 		redirect "/"
 	else
 		flash[:error] = "Incorrect Password.  Please try again."
@@ -226,12 +223,13 @@ post "/photo_post" do
 end
 
 get "/timesheets" do
-	if @require_log_in == true
+	authenticate!
+	administrator!
+
+	if session[:require_log_in] == true
 		redirect "/reenter_password"
 	end
 
-	authenticate!
-	administrator!
 	@temp = DateTime.now.to_date
 	@temp = params[:date] if params[:date]
 	@max = 1
@@ -276,4 +274,65 @@ post "/edit" do
 	administrator!
 	
 	redirect "/timesheets"
+end
+
+get "/employees" do
+	authenticate!
+	administrator!
+
+	if session[:require_log_in] == true
+		redirect "/reenter_password"
+	end
+
+	@employee = User.all(employer: current_user.id)
+	erb :employees
+end
+
+post "/temporary_password" do
+	authenticate!
+	administrator!
+	@id = params['id']
+	erb :temporary_password_change
+end
+
+post "/change_password_temporary" do
+	authenticate!
+	administrator!
+
+	if(params['newPassword'])
+		user = User.first(id: params['id'])
+		if !user.nil?
+			user.password = params['newPassword']
+			user.flag = 2
+			user.save
+			flash[:success] = "Successfully changed password! Will need to be changed again upon next login."
+		else
+			flash[:error] = "Please try again later"
+		end
+
+		redirect "/employees"
+	end
+end
+
+
+post "/delete_account" do
+	authenticate!
+	administrator!
+
+	if session[:require_log_in] == true
+		redirect "/reenter_password"
+	end
+
+	if params['id']
+		user = User.get(params['id'].to_i)
+	end
+
+	if user
+		user.destroy
+		flash[:success] = "Employee Deleted"
+	else
+		flash[:error] = "Employee Not Deleted, please try again"
+	end
+
+	redirect "/employees"
 end

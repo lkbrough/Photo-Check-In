@@ -272,7 +272,41 @@ end
 post "/edit" do
 	authenticate!
 	administrator!
-	
+	redirect "/timesheets" if !params[:type] || !params[:date] || !params[:user_id]
+	if params[:type] == "change_time_in" && params[:change_date] && params[:time_in]
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in])
+		x.update(date: params[:change_date], sign_in: params[:time_in], bold_sign_in: true)
+		x.update(complete: true) if x.sign_out
+	elsif params[:type] == "change_time_out" && params[:change_date] && params[:time_out]
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out])
+		x.update(date: params[:change_date], sign_out: params[:time_out], bold_sign_out: true)
+		x.update(complete: true) if x.sign_in
+	elsif params[:type] == "delete_time_in"
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_in: params[:sign_in])
+		if x.sign_out
+			timecard = TimeCard.new
+			timecard.date = x.date
+			timecard.sign_out = x.sign_out
+			timecard.user_id = x.user_id
+			timecard.save
+			x.destroy
+		else
+			x.destroy
+		end
+	elsif params[:type] == "delete_time_out"
+		x = TimeCard.first(date: params[:date], user_id: params[:user_id], sign_out: params[:sign_out])
+		if x.sign_in
+			timecard = TimeCard.new
+			timecard.date = x.date
+			timecard.sign_in = x.sign_in
+			timecard.user_id = x.user_id
+			timecard.save
+			x.destroy
+		else
+			x.destroy
+		end
+	end
+	redirect "/timesheets?date=#{params[:date]}" if params[:date]
 	redirect "/timesheets"
 end
 

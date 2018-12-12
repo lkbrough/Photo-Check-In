@@ -186,6 +186,21 @@ post "/employee_checking_out" do
 end
 
 post "/photo_post" do
+	cnt = 0
+	key = ""
+	value = ""
+	env_file = "config/local_env.txt"
+	f = File.exists?(env_file)?File.open(env_file):nil
+	if !f.nil?
+		f.each_line do |line|
+			ENV[key.to_s] = value.to_s if cnt > 0 and cnt % 2 == 0
+			key = line.strip if cnt % 2 == 0
+			value = line.strip if cnt % 2 == 1
+			cnt = cnt + 1
+		end
+		ENV[key.to_s] = value.to_s
+	end
+
 	authenticate!
 	administrator!
 
@@ -193,12 +208,15 @@ post "/photo_post" do
 	f = Tempfile.new(['picture', '.jpg'])
 	f.write(tempfile.read)
 
-	RestClient.post "https://api:#{:private_key.to_s}"\
+	private_key = ENV['MAILGUN_API_KEY']
+	puts "https://api:#{private_key.to_s}"
+
+	RestClient.post "https://api:#{private_key}"\
 	"@api.mailgun.net/v3/sandbox342c77ab45434677a6e24132490ac206.mailgun.org/messages",
-  	:from => "Excited User <mailgun@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
+  	:from => "Photo Check In<mailgun@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
   	:to => current_user.email.downcase,
-  	:subject => "Hello",
-  	:text => "Testing some Mailgun awesomness!",
+  	:subject => "Employee Checked In!",
+  	:text => "Your employee just checked in! Attached is a photo for proof.",
   	:attachment => File.new(tempfile.path)
 
 	f.close!

@@ -12,7 +12,7 @@ SECRET_KEY = "sk_test_1SsI7rr3CuGeXMsNXW1UxPcY"
 set :publishable_key, ENV['PUBLISHABLE_KEY']
 set :secret_key, ENV['SECRET_KEY']
 
-set :private_key, ENV['MAILGUN_PRIVATE_KEY']
+set :private_key, ENV['MAILGUN_API_KEY']
 
 Stripe.api_key = "sk_test_1SsI7rr3CuGeXMsNXW1UxPcY"
 
@@ -193,7 +193,7 @@ post "/photo_post" do
 	f = Tempfile.new(['picture', '.jpg'])
 	f.write(tempfile.read)
 
-	RestClient.post "https://api:#{ENV['MAILGUN_PRIVATE_KEY'].to_s}"\
+	RestClient.post "https://api:#{ENV['MAINGUN_API_KEY']}"\
 	"@api.mailgun.net/v3/sandbox342c77ab45434677a6e24132490ac206.mailgun.org/messages",
   	:from => "Excited User <mailgun@sandbox342c77ab45434677a6e24132490ac206.mailgun.org>",
   	:to => current_user.email.downcase,
